@@ -23,9 +23,36 @@
       <button class="btn btn--primary" type="button" (click)="addDay()">+ Nuevo día</button>
     </div>
   </div>
+  <nav class="tabs" aria-label="Secciones">
+    <button type="button" class="tabs__btn" [class.tabs__btn--on]="view() === 'entrenos'" [attr.aria-current]="view() === 'entrenos' ? 'page' : null" (click)="view.set('entrenos')">Entrenos</button>
+    <button type="button" class="tabs__btn" [class.tabs__btn--on]="view() === 'glosario'" [attr.aria-current]="view() === 'glosario' ? 'page' : null" (click)="view.set('glosario')">Glosario</button>
+  </nav>
 </header>
 
 <main class="page">
+  @if (view() === 'glosario') {
+    <section class="glossary">
+      <h2 class="glossary__title">Glosario</h2>
+      <p class="glossary__intro">Términos que aparecen en tus rutinas.</p>
+      @for (t of glossary; track t.term) {
+        <article class="term">
+          <h3 class="term__name">{{ t.term }}</h3>
+          <p class="term__full">{{ t.full }}</p>
+          <p>{{ t.definition }}</p>
+          <p class="term__row"><strong>Ejemplo:</strong> {{ t.example }}</p>
+          <p class="term__row term__tip"><strong>Consejo:</strong> {{ t.tip }}</p>
+        </article>
+      }
+    </section>
+  } @else {
+  <div class="toolbar">
+    <button class="btn btn--ghost" type="button" (click)="exportCsv()">Exportar CSV</button>
+    <button class="btn btn--ghost" type="button" (click)="csvFile.click()">Importar CSV</button>
+    <button class="btn btn--ghost" type="button" (click)="resetToSeed()">Restaurar rutina base</button>
+    <input #csvFile type="file" accept=".csv,text/csv,text/plain" class="sr-only" (change)="importCsv($event)" tabindex="-1" aria-hidden="true" />
+    @if (message()) { <span class="toolbar__msg" role="status">{{ message() }}</span> }
+  </div>
+
   @if (days().length === 0) {
     <section class="empty">
       <h2>Aún no tienes ningún día</h2>
@@ -59,9 +86,10 @@
               <th>Ejercicio</th>
               <th>Series</th>
               <th>Reps</th>
-              <th>Peso (kg)</th>
+              <th>Peso</th>
               <th>Descanso</th>
-              <th>Enlace de referencia</th>
+              <th>Enlace</th>
+              <th>Comentarios</th>
               <th><span class="sr-only">Acciones</span></th>
             </tr>
           </thead>
@@ -77,7 +105,7 @@
                 <td data-label="Reps" class="c-num">
                   <input type="text" inputmode="numeric" [value]="ex.reps" (input)="setField(day.id, ex.id, 'reps', value($event))" placeholder="8-10" aria-label="Repeticiones" />
                 </td>
-                <td data-label="Peso (kg)" class="c-num">
+                <td data-label="Peso" class="c-num">
                   <input type="text" inputmode="decimal" [value]="ex.weight" (input)="setField(day.id, ex.id, 'weight', value($event))" placeholder="60" aria-label="Peso en kilos" />
                 </td>
                 <td data-label="Descanso" class="c-num">
@@ -87,9 +115,12 @@
                   <div class="link">
                     <input type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" [value]="ex.url" (input)="setField(day.id, ex.id, 'url', value($event))" placeholder="youtube.com/…" aria-label="Enlace de referencia" />
                     @if (href(ex.url); as link) {
-                      <a class="link__open" [href]="link" target="_blank" rel="noopener noreferrer" aria-label="Abrir enlace">Abrir</a>
+                      <a class="link__open" [href]="link" target="_blank" rel="noopener noreferrer" aria-label="Abrir enlace" title="Abrir enlace">↗</a>
                     }
                   </div>
+                </td>
+                <td data-label="Comentarios" class="c-notes">
+                  <textarea rows="2" [value]="ex.notes" (input)="setField(day.id, ex.id, 'notes', value($event))" placeholder="Notas, técnica, sensaciones…" aria-label="Comentarios"></textarea>
                 </td>
                 <td class="c-del">
                   <button class="icon-btn" type="button" (click)="removeExercise(day.id, ex.id)" aria-label="Eliminar ejercicio" title="Eliminar ejercicio">
@@ -98,7 +129,7 @@
                 </td>
               </tr>
             } @empty {
-              <tr class="row-empty"><td colspan="7">Este día no tiene ejercicios.</td></tr>
+              <tr class="row-empty"><td colspan="8">Este día no tiene ejercicios.</td></tr>
             }
           </tbody>
         </table>
@@ -106,5 +137,6 @@
 
       <button class="btn btn--add" type="button" (click)="addExercise(day.id)">+ Añadir ejercicio</button>
     </section>
+  }
   }
 </main>

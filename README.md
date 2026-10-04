@@ -12,6 +12,15 @@ Sin backend: todo se guarda en `localStorage` del dispositivo.
 - Responsive: en móvil cada fila se convierte en una tarjeta.
 - PWA: se puede instalar en iPhone, Android, Windows, macOS y Linux, y funciona sin conexión.
 
+## Glosario
+Pestaña con HIIT, RIR y Fallo muscular. Para añadir términos, edita el array `GLOSSARY` en `src/app/app.component.ts`.
+
+## Rutina base y CSV
+- `public/rutina-base.csv` es la rutina inicial. Edítalo con Excel o el Bloc de notas (separador `;`, columnas: dia;ejercicio;series;reps;peso;descanso;enlace;comentarios).
+- La primera vez que se abre la app (sin datos guardados) se carga ese archivo. A partir de ahí, todo lo que hagas se guarda en `localStorage` y manda sobre la base.
+- **Exportar CSV** descarga tu estado actual (`mis-entrenos.csv`). **Importar CSV** lo reemplaza. **Restaurar rutina base** vuelve al archivo original.
+- Una web no puede sobrescribir archivos del disco por sí sola: el "archivo vivo" es el `localStorage`, y el CSV se usa para el punto de partida y las copias de seguridad.
+
 ## Requisitos
 Node.js 18.19+ (recomendado 20 o 22) y npm.
 

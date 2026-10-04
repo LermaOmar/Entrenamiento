@@ -1,5 +1,5 @@
 // Service worker mínimo: permite usar la app sin conexión una vez cargada.
-const CACHE = 'entrenos-v1';
+const CACHE = 'entrenos-v2';
 
 self.addEventListener('install', () => self.skipWaiting());
 
