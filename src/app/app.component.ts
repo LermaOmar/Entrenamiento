@@ -50,7 +50,7 @@ export const GLOSSARY: GlossaryTerm[] = [
     definition:
       'Punto en el que ya no puedes completar otra repetición con la técnica correcta, aunque lo intentes. Equivale a RIR 0.',
     example: 'En unas flexiones, el momento en que no consigues subir otra vez sin romper la postura.',
-    tip: 'Sobre todo si eres principiante, acercate lo maximo posible al fallo es lo que va a permitir que ganes masa muscular y progreses en los ejercicios',
+    tip: 'Llegar al fallo genera mucha fatiga y no hace falta en todas las series. Si lo buscas, mejor en ejercicios seguros (gomas, máquinas) y no en los que pueden hacerte daño si fallas.',
   },
 ];
 
@@ -199,7 +199,7 @@ export class AppComponent {
 
   // ---- Rutina base / CSV ----
   private async fetchSeed(): Promise<Day[]> {
-    const res = await fetch(SEED_URL, { cache: 'no-cache' });
+    const res = await fetch(SEED_URL, { cache: 'no-store' });
     if (!res.ok) throw new Error('No se pudo leer la rutina base');
     return daysFromCsv(await res.text());
   }
